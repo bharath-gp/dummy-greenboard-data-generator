@@ -1,14 +1,13 @@
 import hashlib
 import multiprocessing
 from couchbase.cluster import Cluster, ClusterOptions, PasswordAuthenticator
-import faker
 import random
+import string
 import time
 from constants import *
 HOST = '172.23.120.147'
 
 def create_document(view):
-    fake = faker.Faker()
     doc = {}
     platforms = view['platforms']
     features = view['features']
@@ -18,8 +17,10 @@ def create_document(view):
     component = random.choice(features).split('-')[1]
     doc["component"] = component
     doc['name'] = "%s-%s_%s" % (doc['os'].lower(),
-                                doc['component'].lower(), fake.pystr(
-        10, 25))
+                                doc['component'].lower(),
+                                ''.join([random.choice(
+                                    string.ascii_letters) for i in
+                                    range(0, random.randint(12, 25))]))
     doc["totalCount"] = random.randint(5,50)
     doc["url"] = "http=//qa.sc.couchbase.com/job/test_suite_executor/"
     doc["color"] = random.choice(['yellow_anime', 'red', 'grey'])
